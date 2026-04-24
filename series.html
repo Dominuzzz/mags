@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MAGS — Series</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+<header>
+  <a class="logo" href="/index.html">M<span>A</span>GS</a>
+  <nav>
+    <a href="/others.html">Others</a>
+    <a href="/admin.html">Admin</a>
+  </nav>
+</header>
+<main>
+  <a class="back-link" href="/index.html">← All series</a>
+  <div class="page-header">
+    <h1 id="series-title">Loading...</h1>
+    <p id="series-meta"></p>
+  </div>
+  <div id="years-container">
+    <div class="loading">Loading issues...</div>
+  </div>
+</main>
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close">×</button>
+  <img id="lightbox-img" src="" alt="Cover" />
+</div>
+<div class="notes-popover" id="notes-popover">
+  <div class="notes-box">
+    <h4 id="notes-title">Notes</h4>
+    <div class="notes-content" id="notes-content"></div>
+    <button class="notes-close" id="notes-close">Close</button>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/config.js"></script>
+<script src="/js/series.js"></script>
+</body>
+</html>

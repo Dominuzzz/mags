@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MAGS — Admin</title>
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-box">
+    <h1>M<span>A</span>GS</h1>
+    <p>Admin access</p>
+    <input type="password" id="password-input" placeholder="Password" />
+    <button class="btn-primary" id="login-btn">Enter</button>
+    <div class="login-error" id="login-error">Incorrect password</div>
+  </div>
+</div>
+
+<div id="admin-app">
+  <header class="admin-header">
+    <div class="admin-logo">M<span>A</span>GS <em>admin</em></div>
+    <div class="admin-nav">
+      <button class="tab-btn active" data-tab="series">Series</button>
+      <button class="tab-btn" data-tab="issues">Issues</button>
+      <button class="tab-btn" data-tab="others">Others</button>
+      <button class="btn-logout" id="logout-btn">Log out</button>
+    </div>
+  </header>
+  <div class="admin-content">
+    <div class="tab-panel active" id="tab-series">
+      <div class="section-header">
+        <h2>Magazine Series</h2>
+        <button class="btn btn-add" id="add-series-btn">+ Add Series</button>
+      </div>
+      <div class="series-list" id="series-list"><div class="loading">Loading...</div></div>
+    </div>
+    <div class="tab-panel" id="tab-issues">
+      <div class="section-header"><h2>Issues</h2></div>
+      <div class="series-selector" id="issues-series-selector"><div class="loading">Loading series...</div></div>
+      <div id="issues-content"></div>
+    </div>
+    <div class="tab-panel" id="tab-others">
+      <div class="section-header">
+        <h2>Others</h2>
+        <button class="btn btn-add" id="add-other-btn">+ Add Issue</button>
+      </div>
+      <div class="series-list" id="others-list"><div class="loading">Loading...</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Series -->
+<div class="modal-overlay" id="modal-series">
+  <div class="modal">
+    <h3 id="modal-series-title">Add Series</h3>
+    <input type="hidden" id="series-id-field" />
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" id="series-name" placeholder="e.g. PC Gamer (US)" />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Year Start</label>
+        <input type="number" id="series-year-start" placeholder="e.g. 1993" min="1950" max="2099" />
+      </div>
+      <div class="form-group">
+        <label>Year End (blank if ongoing)</label>
+        <input type="number" id="series-year-end" placeholder="e.g. 2010" min="1950" max="2099" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Notes (optional)</label>
+      <textarea id="series-notes" placeholder="Any notes about this series..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" id="cancel-series-btn">Cancel</button>
+      <button class="btn btn-save" id="save-series-btn">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Issue -->
+<div class="modal-overlay" id="modal-issue">
+  <div class="modal">
+    <h3 id="modal-issue-title">Edit Issue</h3>
+    <input type="hidden" id="issue-id-field" />
+    <input type="hidden" id="issue-series-id-field" />
+    <input type="hidden" id="issue-year-field" />
+    <input type="hidden" id="issue-slot-field" />
+    <div class="form-group">
+      <label>Issue Label (number, month name, etc.)</label>
+      <input type="text" id="issue-label" placeholder="e.g. #47 or March" />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <div class="checkbox-group">
+          <input type="checkbox" id="issue-owned" />
+          <label for="issue-owned">In my collection</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="checkbox-group">
+          <input type="checkbox" id="issue-cd" />
+          <label for="issue-cd">Has CD/DVD</label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>PDF Link</label>
+      <input type="url" id="issue-pdf-url" placeholder="https://archive.org/..." />
+    </div>
+    <div class="form-group">
+      <label>CD/DVD Link</label>
+      <input type="url" id="issue-cd-url" placeholder="https://..." />
+    </div>
+    <div class="form-group">
+      <label>Cover Image</label>
+      <div class="img-upload-area" id="cover-upload-area">
+        <input type="file" id="cover-file-input" accept="image/*" />
+        <p id="cover-upload-label">Click to upload cover image</p>
+        <img class="img-preview" id="cover-preview" src="" alt="" style="display:none" />
+      </div>
+      <input type="hidden" id="issue-cover-url" />
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <div class="rich-toolbar">
+        <button class="rich-btn" data-cmd="bold"><b>B</b></button>
+        <button class="rich-btn" data-cmd="italic"><i>I</i></button>
+        <button class="rich-btn" data-cmd="underline"><u>U</u></button>
+        <button class="rich-btn" data-cmd="createLink">🔗 Link</button>
+        <button class="rich-btn" data-cmd="unlink">Remove link</button>
+        <button class="rich-btn" data-cmd="insertUnorderedList">• List</button>
+      </div>
+      <div class="rich-editor" id="issue-notes-editor" contenteditable="true"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-danger btn-sm" id="delete-issue-btn" style="margin-right:auto;display:none">Delete</button>
+      <button class="btn btn-cancel" id="cancel-issue-btn">Cancel</button>
+      <button class="btn btn-save" id="save-issue-btn">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Other -->
+<div class="modal-overlay" id="modal-other">
+  <div class="modal">
+    <h3 id="modal-other-title">Add Issue</h3>
+    <input type="hidden" id="other-id-field" />
+    <div class="form-group">
+      <label>Magazine Title</label>
+      <input type="text" id="other-title" placeholder="e.g. GameFan" />
+    </div>
+    <div class="form-group">
+      <label>Issue Label</label>
+      <input type="text" id="other-label" placeholder="e.g. #12 or Summer 1997" />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <div class="checkbox-group">
+          <input type="checkbox" id="other-owned" />
+          <label for="other-owned">In my collection</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="checkbox-group">
+          <input type="checkbox" id="other-cd" />
+          <label for="other-cd">Has CD/DVD</label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>PDF Link</label>
+      <input type="url" id="other-pdf-url" placeholder="https://archive.org/..." />
+    </div>
+    <div class="form-group">
+      <label>CD/DVD Link</label>
+      <input type="url" id="other-cd-url" placeholder="https://..." />
+    </div>
+    <div class="form-group">
+      <label>Cover Image</label>
+      <div class="img-upload-area" id="other-cover-upload-area">
+        <input type="file" id="other-cover-file-input" accept="image/*" />
+        <p id="other-cover-upload-label">Click to upload cover image</p>
+        <img class="img-preview" id="other-cover-preview" src="" alt="" style="display:none" />
+      </div>
+      <input type="hidden" id="other-cover-url" />
+    </div>
+    <div class="form-group">
+      <label>Notes</label>
+      <div class="rich-toolbar">
+        <button class="rich-btn" data-cmd="bold"><b>B</b></button>
+        <button class="rich-btn" data-cmd="italic"><i>I</i></button>
+        <button class="rich-btn" data-cmd="underline"><u>U</u></button>
+        <button class="rich-btn" data-cmd="createLink">🔗 Link</button>
+        <button class="rich-btn" data-cmd="unlink">Remove link</button>
+        <button class="rich-btn" data-cmd="insertUnorderedList">• List</button>
+      </div>
+      <div class="rich-editor" id="other-notes-editor" contenteditable="true"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-danger btn-sm" id="delete-other-btn" style="margin-right:auto;display:none">Delete</button>
+      <button class="btn btn-cancel" id="cancel-other-btn">Cancel</button>
+      <button class="btn btn-save" id="save-other-btn">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/config.js"></script>
+<script src="/js/admin.js"></script>
+
+</body>
+</html>
