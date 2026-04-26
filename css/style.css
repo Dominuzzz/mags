@@ -249,6 +249,7 @@ main {
 .badge-cd { background: var(--blue-dim); color: var(--blue); cursor: pointer; }
 .badge-cd:hover { background: var(--blue); color: #000; }
 .badge-note { background: var(--amber-dim); color: var(--amber); cursor: pointer; }
+.badge-missing { background: rgba(248,113,113,0.15); color: #f87171; }
 
 /* LIGHTBOX */
 .lightbox {
