@@ -147,6 +147,11 @@ async function loadSeries() {
         b.className = 'badge badge-owned';
         b.textContent = 'owned';
         badges.appendChild(b);
+      } else if (issue && !issue.owned) {
+        const b = document.createElement('span');
+        b.className = 'badge badge-missing';
+        b.textContent = 'missing';
+        badges.appendChild(b);
       }
       if (issue && issue.cd) {
         const b = document.createElement('span');
