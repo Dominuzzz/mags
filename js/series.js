@@ -98,6 +98,7 @@ async function loadSeries() {
 
     for (let slot = 1; slot <= 12; slot++) {
       const issue = byYear[year][slot] || null;
+      if (!issue) continue; // hide empty slots
       const slot_el = document.createElement('div');
       slot_el.className = 'cover-slot';
 
@@ -155,7 +156,7 @@ async function loadSeries() {
       }
       if (issue && issue.cd) {
         const b = document.createElement('span');
-        b.className = 'badge badge-cd';
+        b.className = issue.owned ? 'badge badge-cd' : 'badge badge-cd-missing';
         b.textContent = 'CD';
         b.title = issue.cd_url ? 'Click to open CD link' : 'CD included';
         if (issue.cd_url) b.addEventListener('click', () => window.open(issue.cd_url, '_blank'));
