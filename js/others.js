@@ -105,9 +105,9 @@ async function loadOthers() {
       b.className = 'badge badge-missing'; b.textContent = 'missing';
       badges.appendChild(b);
     }
-    if (item.cd) {
+    if (item.cd || item.cd_url) {
       const b = document.createElement('span');
-      if (item.owned) {
+      if (item.owned && item.cd) {
         b.className = 'badge badge-cd';
         b.textContent = 'CD';
         if (item.cd_url) {
