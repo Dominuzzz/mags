@@ -107,7 +107,8 @@ async function loadOthers() {
     }
     if (item.cd) {
       const b = document.createElement('span');
-      b.className = 'badge badge-cd'; b.textContent = 'CD';
+      b.className = item.owned ? 'badge badge-cd' : 'badge badge-cd-missing';
+      b.textContent = 'CD';
       if (item.cd_url) b.addEventListener('click', () => window.open(item.cd_url, '_blank'));
       badges.appendChild(b);
     }
