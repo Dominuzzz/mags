@@ -154,9 +154,9 @@ async function loadSeries() {
         b.textContent = 'missing';
         badges.appendChild(b);
       }
-      if (issue && issue.cd) {
+      if (issue && (issue.cd || issue.cd_url)) {
         const b = document.createElement('span');
-        if (issue.owned) {
+        if (issue.owned && issue.cd) {
           b.className = 'badge badge-cd';
           b.textContent = 'CD';
           if (issue.cd_url) {
