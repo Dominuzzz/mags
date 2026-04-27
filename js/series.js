@@ -156,10 +156,24 @@ async function loadSeries() {
       }
       if (issue && issue.cd) {
         const b = document.createElement('span');
-        b.className = issue.owned ? 'badge badge-cd' : 'badge badge-cd-missing';
-        b.textContent = 'CD';
-        b.title = issue.cd_url ? 'Click to open CD link' : 'CD included';
-        if (issue.cd_url) b.addEventListener('click', () => window.open(issue.cd_url, '_blank'));
+        if (issue.owned) {
+          b.className = 'badge badge-cd';
+          b.textContent = 'CD';
+          if (issue.cd_url) {
+            b.title = 'Click to open CD link';
+            b.addEventListener('click', () => window.open(issue.cd_url, '_blank'));
+          }
+        } else {
+          b.className = 'badge badge-cd-missing';
+          b.textContent = 'CD';
+          if (issue.cd_url) {
+            b.title = 'Click to open digital version';
+            b.style.cursor = 'pointer';
+            b.addEventListener('click', () => window.open(issue.cd_url, '_blank'));
+          } else {
+            b.title = 'CD not in collection';
+          }
+        }
         badges.appendChild(b);
       }
       if (issue && issue.notes) {
