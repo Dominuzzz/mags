@@ -107,9 +107,24 @@ async function loadOthers() {
     }
     if (item.cd) {
       const b = document.createElement('span');
-      b.className = item.owned ? 'badge badge-cd' : 'badge badge-cd-missing';
-      b.textContent = 'CD';
-      if (item.cd_url) b.addEventListener('click', () => window.open(item.cd_url, '_blank'));
+      if (item.owned) {
+        b.className = 'badge badge-cd';
+        b.textContent = 'CD';
+        if (item.cd_url) {
+          b.title = 'Click to open CD link';
+          b.addEventListener('click', () => window.open(item.cd_url, '_blank'));
+        }
+      } else {
+        b.className = 'badge badge-cd-missing';
+        b.textContent = 'CD';
+        if (item.cd_url) {
+          b.title = 'Click to open digital version';
+          b.style.cursor = 'pointer';
+          b.addEventListener('click', () => window.open(item.cd_url, '_blank'));
+        } else {
+          b.title = 'CD not in collection';
+        }
+      }
       badges.appendChild(b);
     }
     if (item.notes) {
